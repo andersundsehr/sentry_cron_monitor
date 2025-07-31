@@ -51,6 +51,8 @@ class GenerateCronMonitorForAllTasksCommand extends Command
             sleep(1);
 
             $project = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['aus_sentry_cronmonitor']['sentryProject'];
+            $sentryTeamsChannelId = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['aus_sentry_cronmonitor']['sentryTeamsChannelId'];
+            $teamsChannelName = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['aus_sentry_cronmonitor']['teamsChannelName'];
 
             // create alert for monitor
             $ch = curl_init('https://sentry.andersundsehr.com/api/0/projects/sentry/' . $project . '/rules/');
@@ -68,7 +70,7 @@ class GenerateCronMonitorForAllTasksCommand extends Command
                 $ch,
                 CURLOPT_POSTFIELDS,
                 '{
-                "name": "Monitor Alert for ' . $slug . '",
+                "name": "Monitor Alert for ' . $slug . '. Project: ' . $project . '",
                 "frequency": 1440,
                 "actionMatch": "any",
                 "filterMatch": "all",
@@ -87,8 +89,8 @@ class GenerateCronMonitorForAllTasksCommand extends Command
                 "actions": [
                   {
                     "id": "sentry.integrations.msteams.notify_action.MsTeamsNotifyServiceAction",
-                    "team": 3,
-                    "channel": "sentry"
+                    "team": "' . $sentryTeamsChannelId . '",
+                    "channel": "' . $teamsChannelName . '"
                   }
                 ]
             }'
