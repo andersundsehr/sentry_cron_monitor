@@ -1,6 +1,6 @@
 <?php
 
-namespace AUS\AusJiraApi\Command;
+namespace AUS\AusSentryCronmonitor\Command;
 
 use Sentry\CheckInStatus;
 use Sentry\MonitorConfig;
