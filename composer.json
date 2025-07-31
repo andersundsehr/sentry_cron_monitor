@@ -1,5 +1,5 @@
 {
-    "name": "andersundsehr/aus_sentry_cronmonitor",
+    "name": "andersundsehr/aus_sentry_typo3_cron_monitor_generator",
     "description": "Creates sentry cron monitor for all tasks",
     "type": "typo3-cms-extension",
     "license": [
@@ -15,7 +15,7 @@
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "aus_sentry_cronmonitor"
+            "extension-key": "aus_sentry_typo3_cron_monitor_generator"
         }
     }
 }
