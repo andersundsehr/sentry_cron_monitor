@@ -1,0 +1,21 @@
+{
+    "name": "andersundsehr/aus_sentry_cronmonitor",
+    "description": "Creates sentry cron monitor for all tasks",
+    "type": "typo3-cms-extension",
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "require": {
+        "typo3/cms-core": "^12.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "AUS\\AusSentryCronmonitor\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "aus_sentry_cronmonitor"
+        }
+    }
+}
