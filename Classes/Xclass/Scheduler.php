@@ -11,6 +11,7 @@ use Throwable;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
+
 use function Sentry\captureCheckIn;
 use function Sentry\captureException;
 
@@ -31,10 +32,11 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
             if (is_float($interval)) {
                 $interval = ceil($interval);
                 trigger_error('Task interval can not divide to integer minutes', E_USER_WARNING);
-                if($interval < 5) {
+                if ($interval < 5) {
                     $interval = 5; // minimum 5 minutes
                 }
             }
+
             $monitorSchedule = MonitorSchedule::interval($interval, MonitorScheduleUnit::minute());
         }
 
@@ -55,10 +57,10 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
             $status = $return
                 ? CheckInStatus::ok()
                 : CheckInStatus::error();
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             $status = CheckInStatus::error();
-            captureException($e);
-            throw $e;
+            captureException($throwable);
+            throw $throwable;
         } finally {
             captureCheckIn(
                 slug: $slug,
@@ -89,9 +91,10 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
         $url = $scheme . '://' . $host . '/api/0/projects/sentry' . '/' . $projectId . '/rules/';
         $ch = curl_init($url);
 
-        if($this->alertExits($slug, $authToken, $url)) {
+        if ($this->alertExits($slug, $authToken, $url)) {
             return;
         }
+
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -116,7 +119,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
                     "id": "sentry.rules.filters.tagged_event.TaggedEventFilter",
                     "key": "monitor.slug",
                     "match": "eq",
-                    "value": "' . rtrim(strtolower(preg_replace('/[^A-Za-z0-9-]+/', '-', trim($slug))), '-') . '"
+                    "value": "' . rtrim(strtolower((string) preg_replace('/[^A-Za-z0-9-]+/', '-', trim((string) $slug))), '-') . '"
                   }
                 ],
                 "actions": [
@@ -133,7 +136,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
         curl_close($ch);
     }
 
-    private function alertExits($slug, $authToken, $ch)
+    private function alertExits($slug, string|array $authToken, string $ch): bool
     {
         $ch = curl_init($ch);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -152,6 +155,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
                 }
             }
         }
+
         return false;
     }
 }
