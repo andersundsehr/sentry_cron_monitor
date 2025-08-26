@@ -1,17 +1,13 @@
-# aus_sentry_typo3_cron_monitor_generator
-Generates sentry cron monitor with alerts for typo3 tasks
+# Sentry: Cron Monitor and Microsoft Teams Alerts Generator for TYPO3 Scheduler Tasks
 
-1.) composer require andersundsehr/aus_sentry_typo3_cron_monitor_generator:dev-main
-2.) configure: 
-  $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['aus_sentry_cronmonitor']['sentryProject'] 
-  - Name of project in sentry
-  $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['aus_sentry_cronmonitor']['sentryTeamsChannelId']
-  - Id of Teams channel in sentry
-  $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['aus_sentry_cronmonitor']['teamsChannelName']
-  - Name of Teams channel in which the notification should go
-WIP authToken, sentry url
-
-For this to work you need:
+For this to work you will need:
 - Microsoft Teams Integration: https://develop.sentry.dev/integrations/msteams/
-- authToken
-- 
+
+1.) composer require andersundsehr/sentry_cron_monitor:dev-master
+2.) Configure the extension:
+  - Id of Integration of Microsoft Teams in sentry: integrationIdMsTeams
+    - This you can get from the url of the Microsoft Teams Integration in Sentry when you hover over Configure
+  - Name of Microsoft Teams channel in which the notification should go: teamsChannelName
+  - Authorization token for sentry api: authToken
+    - This you can create in User Auth Tokens in Sentry
+    - Make sure to give read and write permissions to alerts

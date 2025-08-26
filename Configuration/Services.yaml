@@ -4,13 +4,6 @@ services:
     autoconfigure: true
     public: false
 
-  AUS\AusSentryCronmonitor\:
+  AUS\SentryCronMonitor\:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
-
-  AUS\AusSentryCronmonitor\Command\GenerateCronMonitorForAllTasksCommand:
-    tags:
-      - name: 'console.command'
-        command: 'generateCronMonitor'
-        description: ''
-        hidden: false
