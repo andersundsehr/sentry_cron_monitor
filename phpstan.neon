@@ -5,3 +5,5 @@ includes:
 parameters:
   level: 9
   reportUnmatchedIgnoredErrors: false
+  excludePaths:
+    - ext_localconf.php

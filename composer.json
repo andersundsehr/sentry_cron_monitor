@@ -7,7 +7,9 @@
   "type": "typo3-cms-extension",
   "require": {
     "andersundsehr/phpstan-git-files": "^10.1.1",
-    "typo3/cms-core": "^12.4 || ^13.4"
+    "sentry/sentry": "^4.15",
+    "typo3/cms-core": "^12.4 || ^13.4",
+    "typo3/cms-scheduler": "^12.4 || ^13.4"
   },
   "require-dev": {
     "pluswerk/grumphp-config": "^10.1.3",

@@ -2,6 +2,7 @@
 
 namespace AUS\SentryCronMonitor\Xclass;
 
+use Override;
 use Sentry\CheckInStatus;
 use Sentry\MonitorConfig;
 use Sentry\MonitorSchedule;
@@ -10,6 +11,7 @@ use Sentry\SentrySdk;
 use Throwable;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Scheduler\Execution;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 use function Sentry\captureCheckIn;
@@ -21,14 +23,21 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
      * @see https://docs.sentry.io/platforms/php/crons/
      * @throws Throwable
      */
+    #[Override]
     public function executeTask(AbstractTask $task): bool
     {
-        $cronCmd = $task->getExecution()->getCronCmd();
+        $execution = $task->getExecution();
+        $cronCmd = null;
+        if ($execution instanceof Execution) {
+            $cronCmd = $execution->getCronCmd();
+        }
+
+        $monitorSchedule = null;
         if ($cronCmd) {
             $monitorSchedule = MonitorSchedule::crontab($cronCmd);
             $interval = 1440;
-        } else {
-            $interval = $task->getExecution()->getInterval() / 60;
+        } elseif ($execution instanceof Execution) {
+            $interval = $execution->getInterval() / 60;
             if (is_float($interval)) {
                 $interval = ceil($interval);
                 trigger_error('Task interval can not divide to integer minutes', E_USER_WARNING);
@@ -37,47 +46,57 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
                 }
             }
 
-            $monitorSchedule = MonitorSchedule::interval($interval, MonitorScheduleUnit::minute());
+            $monitorSchedule = MonitorSchedule::interval((int)$interval, MonitorScheduleUnit::minute());
         }
 
-        $monitorConfig = new MonitorConfig(
-            $monitorSchedule,
-        );
-        $slug = $task->getTaskTitle() . ' (uid: ' . $task->getTaskUid() . ')';
-        $checkInId = captureCheckIn(
-            slug: $slug,
-            status: CheckInStatus::inProgress(),
-            monitorConfig: $monitorConfig,
-        );
-
-        $this->createAlert($slug, $interval);
-
-        try {
-            $return = parent::executeTask($task);
-            $status = $return
-                ? CheckInStatus::ok()
-                : CheckInStatus::error();
-        } catch (Throwable $throwable) {
-            $status = CheckInStatus::error();
-            captureException($throwable);
-            throw $throwable;
-        } finally {
-            captureCheckIn(
-                slug: $slug,
-                status: $status,
-                checkInId: $checkInId,
+        $return = false;
+        if ($monitorSchedule instanceof MonitorSchedule) {
+            $monitorConfig = new MonitorConfig(
+                $monitorSchedule,
             );
+
+            $slug = $task->getTaskTitle() . ' (uid: ' . $task->getTaskUid() . ')';
+            $checkInId = captureCheckIn(
+                slug: $slug,
+                status: CheckInStatus::inProgress(),
+                monitorConfig: $monitorConfig,
+            );
+
+            $this->createAlert($slug, (int)$interval);
+
+            $status = CheckInStatus::error();
+            try {
+                $return = parent::executeTask($task);
+                $status = $return
+                    ? CheckInStatus::ok()
+                    : CheckInStatus::error();
+            } catch (Throwable $throwable) {
+                $status = CheckInStatus::error();
+                captureException($throwable);
+                throw $throwable;
+            } finally {
+                captureCheckIn(
+                    slug: $slug,
+                    status: $status,
+                    checkInId: $checkInId,
+                );
+            }
         }
 
         return $return;
     }
 
-    public function createAlert($slug, $interval): void
+    public function createAlert(string $slug, int $interval): void
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
-        $integrationIdMsTeams = str_replace("'", '', $extensionConfiguration->get('sentry_cron_monitor', 'integrationIdMsTeams'));
-        $teamsChannelName = str_replace("'", '', $extensionConfiguration->get('sentry_cron_monitor', 'teamsChannelName'));
-        $authToken = str_replace("'", '', $extensionConfiguration->get('sentry_cron_monitor', 'authToken'));
+        $integrationIdMsTeamsRaw = $extensionConfiguration->get('sentry_cron_monitor', 'integrationIdMsTeams');
+        $integrationIdMsTeams = is_string($integrationIdMsTeamsRaw) ? str_replace("'", '', $integrationIdMsTeamsRaw) : '';
+
+        $teamsChannelNameRaw = $extensionConfiguration->get('sentry_cron_monitor', 'teamsChannelName');
+        $teamsChannelName = is_string($teamsChannelNameRaw) ? str_replace("'", '', $teamsChannelNameRaw) : '';
+
+        $authTokenRaw = $extensionConfiguration->get('sentry_cron_monitor', 'authToken');
+        $authToken = is_string($authTokenRaw) ? str_replace("'", '', $authTokenRaw) : '';
 
         $options = SentrySdk::getCurrentHub()->getClient()?->getOptions();
         if (!$options) {
@@ -85,6 +104,10 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
         }
 
         $dsn = $options->getDsn();
+        if (!$dsn) {
+            return;
+        }
+
         $host = $dsn->getHost();
         $scheme = $dsn->getScheme();
         $projectId = $dsn->getProjectId();
@@ -119,7 +142,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
                     "id": "sentry.rules.filters.tagged_event.TaggedEventFilter",
                     "key": "monitor.slug",
                     "match": "eq",
-                    "value": "' . rtrim(strtolower((string) preg_replace('/[^A-Za-z0-9-]+/', '-', trim((string) $slug))), '-') . '"
+                    "value": "' . rtrim(strtolower((string)preg_replace('/[^A-Za-z0-9-]+/', '-', trim($slug))), '-') . '"
                   }
                 ],
                 "actions": [
@@ -136,7 +159,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
         curl_close($ch);
     }
 
-    private function alertExits($slug, string|array $authToken, string $ch): bool
+    private function alertExits(string $slug, string $authToken, string $ch): bool
     {
         $ch = curl_init($ch);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -147,11 +170,15 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
         ]);
         $response = curl_exec($ch);
         curl_close($ch);
-        $data = json_decode($response, true);
-        foreach ($data as $rule) {
-            foreach ($rule['filters'] as $filter) {
-                if ($filter['value'] === $slug) {
-                    return true;
+        $data = json_decode((string)$response, true);
+        if (is_array($data)) {
+            foreach ($data as $rule) {
+                if (is_array($rule) && isset($rule['filters']) && is_array($rule['filters'])) {
+                    foreach ($rule['filters'] as $filter) {
+                        if (is_array($filter) && $filter['value'] === $slug) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
