@@ -18,3 +18,4 @@ For this to work you will need:
     - it will create a monitor and alert in Sentry for the given scheduler task if there is none yet
     - it will send a check in status to Sentry if the task was sucessful or not
       - if the task fails, it will trigger an alert in Sentry which will send a notification to the configured Microsoft Teams channel, example:
+<img width="1227" height="322" alt="image" src="https://github.com/user-attachments/assets/91b7865e-e03a-4bac-89df-2db5f685fa97" />
