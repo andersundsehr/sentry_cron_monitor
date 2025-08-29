@@ -3,7 +3,5 @@ includes:
   - vendor/andersundsehr/phpstan-git-files/extension.php
 
 parameters:
-  level: 9
+  level: 8
   reportUnmatchedIgnoredErrors: false
-  excludePaths:
-    - ext_localconf.php

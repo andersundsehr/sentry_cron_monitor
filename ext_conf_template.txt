@@ -1,3 +1,11 @@
+# cat=sentry_cron_monitor; type=integer; label=Integration ID for Microsoft Teams
 integrationIdMsTeams =
+
+# cat=sentry_cron_monitor; type=string; label=Organization name in Sentry
+orgName =
+
+# cat=sentry_cron_monitor; type=string; label=Microsoft Teams channel name
 teamsChannelName =
+
+# cat=sentry_cron_monitor; type=string; label=Authorization token for Sentry API
 authToken =
