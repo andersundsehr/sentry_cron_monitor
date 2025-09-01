@@ -188,7 +188,6 @@ class AlertServiceTest extends TestCase
             'title' => 'Different Job Name',
             'responses' => [
                 new JsonResponse([$alertDifferentJobName]), // does exist request
-                new JsonResponse([]), // create request
             ],
             'expectedRequests' => [
                 [
