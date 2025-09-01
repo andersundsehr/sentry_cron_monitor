@@ -38,8 +38,8 @@ final readonly class AlertService
         $url = $this->dsnService->provideUrl($orgName);
         $response = $this->requestFactory->request($url, 'GET', [
             'headers' => [
-                "Authorization" => "Bearer " . $authToken,
-                "Content-Type" => "application/json",
+                'Authorization' => 'Bearer ' . $authToken,
+                'Content-Type' => 'application/json',
             ],
         ]);
 
@@ -47,7 +47,6 @@ final readonly class AlertService
         $data = json_decode($jsonString, true);
 
         if (!is_array($data)) {
-            var_dump('No data received from Sentry, not creating alert.');
             return false;
         }
 
@@ -62,12 +61,10 @@ final readonly class AlertService
                     continue;
                 }
 
-                var_dump('Alert for ' . $slug . ' already exists, not creating a new one.');
                 return true;
             }
         }
 
-        var_dump('false');
         return false;
     }
 
