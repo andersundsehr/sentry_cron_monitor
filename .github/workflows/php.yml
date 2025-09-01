@@ -11,18 +11,17 @@ permissions:
 
 jobs:
   test:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         php: [ '8.3', '8.4']
         typo3: [ '12', '13' ]
-        os: [ 'ubuntu-24.04', 'ubuntu-25.04' ]
-        exclude:
-          - os: ubuntu-24.04
-            php: '8.4'
-          - os: ubuntu-25.04
-            php: '8.3'
-    runs-on: ${{ matrix.os }}
     steps:
+    - name: Setup PHP with PECL extension
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+
     - uses: actions/checkout@v4
 
     - name: Install dependencies
