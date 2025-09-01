@@ -3,15 +3,12 @@
 namespace AUS\SentryCronMonitor\Xclass;
 
 use AUS\SentryCronMonitor\Service\AlertService;
-use AUS\SentryCronMonitor\Service\DsnService;
 use Override;
 use Sentry\CheckInStatus;
 use Sentry\MonitorConfig;
 use Sentry\MonitorSchedule;
 use Sentry\MonitorScheduleUnit;
 use Throwable;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Execution;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;

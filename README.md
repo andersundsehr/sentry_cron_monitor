@@ -18,8 +18,3 @@ When a scheduler task runs:
    - You can create this token in the User Auth Tokens in Sentry.
    - Make sure to grant read and write permissions to alerts.
 
-
-
---- ALertserviceTest.php:
-// eins ohne My Job Name -> unterschiedliche Namen
-// Pipeline: Test starten und grumphp -> repo github angucken und abschauen
