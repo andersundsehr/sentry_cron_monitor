@@ -1,6 +1,6 @@
 pipelines:
   branches:
-    main:
+    "**":
       - step:
           name: PHP Composer
           image: composer:2-php8.3
@@ -23,7 +23,7 @@ pipelines:
             - composer test
 
   pull-requests:
-    main:
+    "**":
       - step:
           name: PHP Composer
           image: composer:2-php8.3
