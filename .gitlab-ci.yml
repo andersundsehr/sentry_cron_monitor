@@ -11,7 +11,7 @@ stages:
     - vendor/bin/grumphp run
     - composer test
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
 
 composer_main_8.3:
   extends: .composer_main
@@ -31,7 +31,7 @@ composer_main_8.4:
     - vendor/bin/grumphp run
     - composer test
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 composer_mr_8.3:
   extends: .composer_mr
