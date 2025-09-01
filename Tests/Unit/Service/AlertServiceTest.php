@@ -64,6 +64,13 @@ class AlertServiceTest extends TestCase
                 ],
             ],
         ];
+        $alertDifferentJobName = [
+            'filters' => [
+                [
+                    'value' => 'different-job-name',
+                ],
+            ],
+        ];
         $createAlertRequest = [
             'frequency' => 5,
             'name' => 'Monitor Alert for My Job Name',
@@ -172,6 +179,26 @@ class AlertServiceTest extends TestCase
                             'Content-Type' => 'application/json',
                         ],
                         'json' => $createAlertRequest,
+                    ],
+                    'context' => null,
+                ],
+            ],
+        ];
+        yield 'different name' => [
+            'title' => 'Different Job Name',
+            'responses' => [
+                new JsonResponse([$alertDifferentJobName]), // does exist request
+                new JsonResponse([]), // create request
+            ],
+            'expectedRequests' => [
+                [
+                    'method' => 'GET',
+                    'uri' => 'https://example.com/api/0/projects/orgName/42/rules/',
+                    'options' => [
+                        'headers' => [
+                            'Authorization' => 'Bearer authToken123',
+                            'Content-Type' => 'application/json',
+                        ],
                     ],
                     'context' => null,
                 ],
