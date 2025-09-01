@@ -2,6 +2,7 @@
 
 namespace AUS\SentryCronMonitor\Service;
 
+use Exception;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
@@ -49,15 +50,18 @@ final readonly class AlertService
             var_dump('No data received from Sentry, not creating alert.');
             return false;
         }
+
         foreach ($data as $rule) {
             $filters = $rule['filters'] ?? null;
             if (!is_array($filters)) {
-                throw new \Exception('Unexpected data from Sentry');
+                throw new Exception('Unexpected data from Sentry', 3744386449);
             }
+
             foreach ($rule['filters'] as $filter) {
                 if ($filter['value'] !== $slug) {
                     continue;
                 }
+
                 var_dump('Alert for ' . $slug . ' already exists, not creating a new one.');
                 return true;
             }
@@ -67,24 +71,15 @@ final readonly class AlertService
         return false;
     }
 
-    /**
-     * @param string $url
-     * @param mixed $authToken
-     * @param string $slug
-     * @param string $title
-     * @param mixed $integrationIdMsTeams
-     * @param mixed $teamsChannelName
-     * @return void
-     */
-    public function alertSentry(string $orgName,
+    public function alertSentry(
+        string $orgName,
         mixed $authToken,
         string $slug,
         string $title,
         mixed $integrationIdMsTeams,
-        mixed $teamsChannelName): void
-    {
+        mixed $teamsChannelName
+    ): void {
         $url = $this->dsnService->provideUrl($orgName);
-
 
         $this->requestFactory->request($url, 'POST', [
             'headers' => [

@@ -2,6 +2,7 @@
 
 namespace AUS\SentryCronMonitor\Xclass;
 
+use RuntimeException;
 use AUS\SentryCronMonitor\Service\AlertService;
 use Override;
 use Sentry\CheckInStatus;
@@ -17,7 +18,6 @@ use function Sentry\captureCheckIn;
 
 class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
 {
-
     /**
      * @see https://docs.sentry.io/platforms/php/crons/
      * @throws Throwable
@@ -27,7 +27,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
     {
         $execution = $task->getExecution();
         if (!$execution instanceof Execution) {
-            throw new \RuntimeException('Task ' . $task->getTaskUid() . ' execution is not an instance of TYPO3\CMS\Scheduler\Execution');
+            throw new RuntimeException('Task ' . $task->getTaskUid() . ' execution is not an instance of TYPO3\CMS\Scheduler\Execution', 6967941122);
         }
 
         $monitorSchedule = $execution->getCronCmd()

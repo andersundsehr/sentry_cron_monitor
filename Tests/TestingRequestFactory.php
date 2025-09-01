@@ -2,6 +2,8 @@
 
 namespace AUS\SentryCronMonitor\Tests;
 
+use Override;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
 
@@ -20,7 +22,7 @@ final class TestingRequestFactory extends RequestFactory
     }
 
     /**
-     * @param array<string, string>|array $options
+     * @param array<string, string>|array<string, mixed> $options
      */
     #[Override]
     public function request(string $uri, string $method = 'GET', array $options = [], ?string $context = null): ResponseInterface
@@ -29,7 +31,8 @@ final class TestingRequestFactory extends RequestFactory
             'uri' => $uri,
             'method' => $method,
             'options' => $options,
+            'context' => $context,
         ];
-        return array_shift($this->responses) ?? throw new \Exception('to many requests made for this test.', 3414962574);
+        return array_shift($this->responses) ?? throw new Exception('to many requests made for this test.', 3414962574);
     }
 }

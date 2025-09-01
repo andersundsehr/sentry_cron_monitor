@@ -2,6 +2,8 @@
 
 namespace AUS\SentryCronMonitor\Tests\Unit\Service;
 
+use Generator;
+use Psr\Http\Message\ResponseInterface;
 use AUS\SentryCronMonitor\Service\AlertService;
 use AUS\SentryCronMonitor\Service\DsnService;
 use AUS\SentryCronMonitor\Service\UrlService;
@@ -17,7 +19,8 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 class AlertServiceTest extends TestCase
 {
     /**
-     * @param list<\Psr\Http\Message\ResponseInterface> $responses
+     * @param list<ResponseInterface> $responses
+     * @param array<string, string>|array<string, mixed> $expectedRequests
      */
     #[Test]
     #[DataProvider('provideCreateAlertData')]
@@ -45,7 +48,7 @@ class AlertServiceTest extends TestCase
         $this->assertEquals($expectedRequests, $requestFactory->requests, 'The requests made are not as expected');
     }
 
-    public static function provideCreateAlertData(): \Generator
+    public static function provideCreateAlertData(): Generator
     {
         $alertMyJobName = [
             'filters' => [
@@ -106,6 +109,7 @@ class AlertServiceTest extends TestCase
                             'Content-Type' => 'application/json',
                         ],
                     ],
+                    'context' => null,
                 ],
             ],
         ];
@@ -125,6 +129,7 @@ class AlertServiceTest extends TestCase
                             'Content-Type' => 'application/json',
                         ],
                     ],
+                    'context' => null,
                 ],
                 [
                     'method' => 'POST',
@@ -136,6 +141,7 @@ class AlertServiceTest extends TestCase
                         ],
                         'json' => $createAlertRequest,
                     ],
+                    'context' => null,
                 ],
             ],
         ];
@@ -155,6 +161,7 @@ class AlertServiceTest extends TestCase
                             'Content-Type' => 'application/json',
                         ],
                     ],
+                    'context' => null,
                 ],
                 [
                     'method' => 'POST',
@@ -166,6 +173,7 @@ class AlertServiceTest extends TestCase
                         ],
                         'json' => $createAlertRequest,
                     ],
+                    'context' => null,
                 ],
             ],
         ];
