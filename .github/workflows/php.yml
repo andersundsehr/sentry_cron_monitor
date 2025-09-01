@@ -30,6 +30,9 @@ jobs:
 
     - name: Update dependencies
       run: composer update
+
+    - name: Normalize dependencies
+      run: composer normalize
       
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
