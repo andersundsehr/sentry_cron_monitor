@@ -15,7 +15,7 @@ jobs:
       matrix:
         php: [ '8.3', '8.4']
         typo3: [ '12', '13' ]
-        os: [ 'ubuntu:noble', 'ubuntu:plucky' ]
+        os: [ 'ubuntu-18.04', 'ubuntu-24.04' ]
         exclude:
           - os: ubuntu:noble
             php: '8.4'
