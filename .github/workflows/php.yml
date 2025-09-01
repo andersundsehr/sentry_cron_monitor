@@ -15,11 +15,11 @@ jobs:
       matrix:
         php: [ '8.3', '8.4']
         typo3: [ '12', '13' ]
-        os: [ 'ubuntu:noble', 'ubuntu:plucky' ]
+        os: [ 'ubuntu-noble', 'ubuntu-plucky' ]
         exclude:
-          - os: ubuntu:noble
+          - os: ubuntu-noble
             php: '8.4'
-          - os: ubuntu:plucky
+          - os: ubuntu-plucky
             php: '8.3'
     runs-on: ${{ matrix.os }}
     steps:
