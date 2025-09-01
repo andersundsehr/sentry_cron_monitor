@@ -1,0 +1,42 @@
+stages:
+  - test
+
+.composer_main:
+  stage: test
+  script:
+    - composer install
+    - composer update
+    - composer normalize
+    - composer validate --strict
+    - vendor/bin/grumphp run
+    - composer test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"'
+
+composer_main_8.3:
+  extends: .composer_main
+  image: composer:2-php8.3
+
+composer_main_8.4:
+  extends: .composer_main
+  image: composer:2-php8.4
+
+.composer_mr:
+  stage: test
+  script:
+    - composer install
+    - composer update
+    - composer normalize
+    - composer validate --strict
+    - vendor/bin/grumphp run
+    - composer test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+
+composer_mr_8.3:
+  extends: .composer_mr
+  image: composer:2-php8.3
+
+composer_mr_8.4:
+  extends: .composer_mr
+  image: composer:2-php8.3

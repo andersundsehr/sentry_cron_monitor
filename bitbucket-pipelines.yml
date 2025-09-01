@@ -1,0 +1,46 @@
+pipelines:
+  branches:
+    main:
+      - step:
+          name: PHP Composer
+          image: composer:2-php8.3
+          script:
+            - composer install
+            - composer update
+            - composer normalize
+            - composer validate --strict
+            - vendor/bin/grumphp run
+            - composer test
+      - step:
+          name: PHP Composer
+          image: composer:2-php8.4
+          script:
+            - composer install
+            - composer update
+            - composer normalize
+            - composer validate --strict
+            - vendor/bin/grumphp run
+            - composer test
+
+  pull-requests:
+    main:
+      - step:
+          name: PHP Composer
+          image: composer:2-php8.3
+          script:
+            - composer install
+            - composer update
+            - composer normalize
+            - composer validate --strict
+            - vendor/bin/grumphp run
+            - composer test
+      - step:
+          name: PHP Composer
+          image: composer:2-php8.4
+          script:
+            - composer install
+            - composer update
+            - composer normalize
+            - composer validate --strict
+            - vendor/bin/grumphp run
+            - composer test
