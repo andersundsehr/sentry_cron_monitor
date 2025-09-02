@@ -1,7 +1,7 @@
 stages:
   - test
 
-.composer_main:
+.composer_branch:
   stage: test
   script:
     - composer install
@@ -13,13 +13,13 @@ stages:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
 
-composer_main_8.3:
-  extends: .composer_main
-  image: composer:2-php8.3
+composer_branch_8.3:
+  extends: .composer_branch
+  image: kanti/buildy:8.3
 
-composer_main_8.4:
-  extends: .composer_main
-  image: composer:2-php8.4
+composer_branch_8.4:
+  extends: .composer_branch
+  image: kanti/buildy:8.4
 
 .composer_mr:
   stage: test
@@ -35,8 +35,8 @@ composer_main_8.4:
 
 composer_mr_8.3:
   extends: .composer_mr
-  image: composer:2-php8.3
+  image: kanti/buildy:8.3
 
 composer_mr_8.4:
   extends: .composer_mr
-  image: composer:2-php8.3
+  image: kanti/buildy:8.4
