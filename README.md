@@ -8,7 +8,7 @@ When a scheduler task runs:
 ![img_1.png](img_1.png)
 ## Requirements:
 - Microsoft Teams Integration in Sentry + add App to Channel to get $integrationIdMsTeams in Sentry: [https://develop.sentry.dev/integrations/msteams/](https://develop.sentry.dev/integrations/msteams/)
-Successful Integration in Channel:
+- Successful Integration in Channel:
   <img width="1273" height="1042" alt="image" src="https://github.com/user-attachments/assets/b32d39f9-f266-4911-9add-7c07f53616a8" />
 
 ## Extension Configuration:
