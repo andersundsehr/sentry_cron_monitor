@@ -10,7 +10,7 @@ When a scheduler task runs:
 - Microsoft Teams Integration in Sentry + add App to (standard) Channel to get $integrationIdMsTeams in Sentry: [https://develop.sentry.dev/integrations/msteams/](https://develop.sentry.dev/integrations/msteams/)
 - Successful Integration in Channel:
   <img width="1273" height="1042" alt="image" src="https://github.com/user-attachments/assets/b32d39f9-f266-4911-9add-7c07f53616a8" />
-
+- ⚠️ Unfortunately, it doesn't work if you select the channel created for you by Teams when you create a team, and you have to create a second channel for Sentry to post its messages there.
 ## Extension Configuration:
 1. **Integration ID for Microsoft Teams in Sentry**: `$integrationIdMsTeams`
    - You can get this from the URL of the Microsoft Teams Integration in Sentry when you hover over "Configure."
