@@ -7,7 +7,7 @@ When a scheduler task runs:
 - If the task fails, it will send a status error to Sentry, and the alert (only in Production) from the cron monitor will send a notification to the configured Microsoft Teams channel. Example:
 ![img_1.png](img_1.png)
 ## Requirements:
-- Microsoft Teams Integration in Sentry: [https://develop.sentry.dev/integrations/msteams/](https://develop.sentry.dev/integrations/msteams/)
+- Microsoft Teams Integration in Sentry + add App to Channel to get IntegrationIdMsTeams in Sentry: [https://develop.sentry.dev/integrations/msteams/](https://develop.sentry.dev/integrations/msteams/)
 
 ## Extension Configuration:
 1. **Integration ID for Microsoft Teams in Sentry**: `$integrationIdMsTeams`
