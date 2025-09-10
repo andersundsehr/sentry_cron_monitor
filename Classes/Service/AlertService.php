@@ -85,7 +85,7 @@ final readonly class AlertService
             ],
             'json' => [
                 "name" => "Monitor Alert for " . $title,
-                "frequency" => '5',
+                "frequency" => 5,
                 "actionMatch" => "any",
                 "filterMatch" => "all",
                 "environment" => 'Production',
