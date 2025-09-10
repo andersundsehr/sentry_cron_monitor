@@ -13,6 +13,7 @@ use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Execution;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
+use TYPO3\CMS\Core\Core\Environment;
 
 use function Sentry\captureCheckIn;
 
@@ -25,6 +26,11 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
     #[Override]
     public function executeTask(AbstractTask $task): bool
     {
+        
+        if (!Environment::getContext()->isProduction()) {
+            return parent::executeTask($task);
+        }
+        
         $execution = $task->getExecution();
         if (!$execution instanceof Execution) {
             throw new RuntimeException('Task ' . $task->getTaskUid() . ' execution is not an instance of TYPO3\CMS\Scheduler\Execution', 6967941122);
