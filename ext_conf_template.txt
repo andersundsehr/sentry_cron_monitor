@@ -9,3 +9,6 @@ teamsChannelName =
 
 # cat=sentry_cron_monitor; type=string; label=Authorization token for Sentry API
 authToken =
+
+# cat=sentry_cron_monitor; type=string; label=Timezone for cron monitor
+timezone =
