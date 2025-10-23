@@ -39,7 +39,9 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
             ? MonitorSchedule::crontab($execution->getCronCmd())
             : MonitorSchedule::interval((int) ceil($execution->getInterval() / 60), MonitorScheduleUnit::minute());
 
-        $monitorConfig = new MonitorConfig($monitorSchedule);
+        $extensionConfiguration = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class);
+        $timezone = $extensionConfiguration->get('sentry_cron_monitor', 'timezone');
+        $monitorConfig = new MonitorConfig($monitorSchedule, timezone: $timezone);
 
         $title = $task->getTaskTitle() . ' (uid: ' . $task->getTaskUid() . ')';
         $checkInId = captureCheckIn(
