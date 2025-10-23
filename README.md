@@ -19,4 +19,5 @@ When a scheduler task runs:
 4. **Authorization token for the Sentry API**: `$authToken`
    - You can create this token in the User Auth Tokens in Sentry.
    - Make sure to grant read and write permissions to alerts.
-
+5. **Timezone** for cron monitors: `$timezone`
+   - Example: `Europe/Berlin`
