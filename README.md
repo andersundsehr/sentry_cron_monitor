@@ -21,3 +21,6 @@ When a scheduler task runs:
    - Make sure to grant read and write permissions to alerts.
 5. **Timezone** for cron monitors: `$timezone`
    - Example: `Europe/Berlin`
+
+#Tip: 
+- If a cron monitor is triggering too many false positives, increase the failure tolerance in Sentry
