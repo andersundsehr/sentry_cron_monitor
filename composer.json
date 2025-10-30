@@ -17,7 +17,7 @@
     "saschaegerer/phpstan-typo3": "^2.1.1",
     "ssch/typo3-rector": "^3.6.2",
     "typo3/testing-framework": "^9.2",
-    "andersundsehr/phpstan-git-files": "^10.1.1",
+    "andersundsehr/phpstan-git-files": "^10.1.1"
   },
   "autoload": {
     "psr-4": {
