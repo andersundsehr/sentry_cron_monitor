@@ -88,7 +88,6 @@ final readonly class AlertService
                 "frequency" => 5,
                 "actionMatch" => "any",
                 "filterMatch" => "all",
-                "gracePeriod" => 120,
                 "environment" => 'Production',
                 "conditions" => [
                     ["id" => "sentry.rules.conditions.first_seen_event.FirstSeenEventCondition"],
