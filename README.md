@@ -23,4 +23,4 @@ When a scheduler task runs:
    - Example: `Europe/Berlin`
 
 ## Tip: 
-- If a cron monitor is triggering too many false positives, increase the failure tolerance in Sentry. However, a default grace period of two minutes is set.
+- If a cron monitor is triggering too many false positives, increase the failure tolerance in Sentry.
