@@ -2,6 +2,7 @@
 
 namespace AUS\SentryCronMonitor\Xclass;
 
+use AUS\SentryCronMonitor\Service\DsnService;
 use RuntimeException;
 use AUS\SentryCronMonitor\Service\AlertService;
 use Override;
@@ -26,7 +27,8 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
     #[Override]
     public function executeTask(AbstractTask $task): bool
     {
-        if (!Environment::getContext()->isProduction()) {
+        $isSentryReachable = $this->isSentryReachable();
+        if (!Environment::getContext()->isProduction() || !$isSentryReachable) {
             return parent::executeTask($task);
         }
 
@@ -65,7 +67,17 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
             );
         }
 
-
         return $return;
+    }
+
+    private function isSentryReachable(): bool
+    {
+        $dsnService = GeneralUtility::makeInstance(DsnService::class);
+        $url = $dsnService->provideSentry();
+        if (@fopen($url,"r")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

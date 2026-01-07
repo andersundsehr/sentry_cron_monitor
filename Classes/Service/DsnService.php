@@ -14,9 +14,22 @@ class DsnService
 
     public function provideUrl(string $orgName): string
     {
-        $this->dsn ??= SentrySdk::getCurrentHub()->getClient()?->getOptions()?->getDsn() ??
-            throw new RuntimeException('Sentry is not initialized', 6020020999);
+        $this->getDsn();
 
         return $this->dsn->getScheme() . '://' . $this->dsn->getHost() . '/api/0/projects/' . $orgName . '/' . $this->dsn->getProjectId() . '/rules/';
+    }
+
+    public function provideSentry(): string {
+        $this->getDsn();
+        return $this->dsn->getScheme() . '://' . $this->dsn->getHost();
+    }
+
+    /**
+     * @return void
+     */
+    public function getDsn(): void
+    {
+        $this->dsn ??= SentrySdk::getCurrentHub()->getClient()?->getOptions()?->getDsn() ??
+            throw new RuntimeException('Sentry is not initialized', 6020020999);
     }
 }
