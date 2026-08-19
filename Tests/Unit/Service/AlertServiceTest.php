@@ -26,26 +26,19 @@ class AlertServiceTest extends TestCase
     #[DataProvider('provideCreateAlertData')]
     public function createIfNotExists(string $title, array $responses, array $expectedRequests): void
     {
-        $extensionConfiguration = new class extends ExtensionConfiguration {
-            public function get(string $extension, string $path = ''): mixed
-            {
-                Assert::assertEquals($extension, 'sentry_cron_monitor');
-
-                return match ($path) {
-                    'integrationIdMsTeams' => 'integrationIdMsTeams',
-                    'teamsChannelName' => 'teamsChannelName',
-                    'orgName' => 'orgName',
-                    'authToken' => 'authToken123',
-                    default => null,
-                };
-            }
-        };
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_cron_monitor'] = [
+            'integrationIdMsTeams' => 'integrationIdMsTeams',
+            'teamsChannelName' => 'teamsChannelName',
+            'orgName' => 'orgName',
+            'authToken' => 'authToken123',
+        ];
+        $extensionConfiguration = new ExtensionConfiguration();
         $requestFactory = new TestingRequestFactory($responses);
         $dsnService = new DsnService(Dsn::createFromString('https://12345@example.com/42'));
         $service = new AlertService($extensionConfiguration, $requestFactory, $dsnService);
 
         $service->createIfNotExists($title);
-        $this->assertEquals($expectedRequests, $requestFactory->requests, 'The requests made are not as expected');
+        $this->assertEquals($expectedRequests, $requestFactory->requestStore->requests, 'The requests made are not as expected');
     }
 
     public static function provideCreateAlertData(): Generator

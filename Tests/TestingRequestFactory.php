@@ -2,37 +2,19 @@
 
 namespace AUS\SentryCronMonitor\Tests;
 
-use Override;
-use Exception;
-use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
 
-final class TestingRequestFactory extends RequestFactory
-{
-    /**
-     * @var list<array{uri: string, method: string, options: array<string, mixed>, context: string|null}>
-     */
-    public array $requests = [];
-
-    /**
-     * @param array<ResponseInterface> $responses
-     */
-    public function __construct(private array $responses)
+if ((new Typo3Version())->getMajorVersion() >= 14) {
+    // phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses
+    final readonly class TestingRequestFactory extends RequestFactory
     {
+        use TestingRequestFactoryTrait;
     }
-
-    /**
-     * @param array<string, string>|array<string, mixed> $options
-     */
-    #[Override]
-    public function request(string $uri, string $method = 'GET', array $options = [], ?string $context = null): ResponseInterface
+} else {
+    // phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses
+    final class TestingRequestFactory extends RequestFactory
     {
-        $this->requests[] = [
-            'uri' => $uri,
-            'method' => $method,
-            'options' => $options,
-            'context' => $context,
-        ];
-        return array_shift($this->responses) ?? throw new Exception('to many requests made for this test.', 3414962574);
+        use TestingRequestFactoryTrait;
     }
 }

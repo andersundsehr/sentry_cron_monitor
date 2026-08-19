@@ -2,6 +2,7 @@
 
 namespace AUS\SentryCronMonitor\Xclass;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use AUS\SentryCronMonitor\Service\DsnService;
 use RuntimeException;
 use AUS\SentryCronMonitor\Service\AlertService;
@@ -41,7 +42,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
             ? MonitorSchedule::crontab($execution->getCronCmd())
             : MonitorSchedule::interval((int) ceil($execution->getInterval() / 60), MonitorScheduleUnit::minute());
 
-        $extensionConfiguration = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class);
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
         $timezone = $extensionConfiguration->get('sentry_cron_monitor', 'timezone');
         $monitorConfig = new MonitorConfig($monitorSchedule, timezone: $timezone);
 
@@ -74,10 +75,6 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
     {
         $dsnService = GeneralUtility::makeInstance(DsnService::class);
         $url = $dsnService->provideSentry();
-        if (@fopen($url,"r")) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool) @fopen($url, "r");
     }
 }

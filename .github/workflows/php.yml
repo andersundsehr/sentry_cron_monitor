@@ -7,33 +7,20 @@ permissions:
 
 jobs:
   test:
+    name: "linting:    php: ${{ matrix.php }} TYPO3: ${{ matrix.typo3 }}"
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        php: [ '8.3', '8.4']
-        typo3: [ '12', '13' ]
+        php: [ '8.3', '8.4', '8.5' ]
+        typo3: [ '13', '14' ]
     steps:
     - name: Setup PHP with PECL extension
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php }}
 
-    - uses: actions/checkout@v4
-
-    - name: Install dependencies
-      run: composer install
-
-    - name: Update dependencies
-      run: composer update
-
-    - name: Normalize dependencies
-      run: composer normalize
-      
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: GrumPHP
-      run: vendor/bin/grumphp run
-      
-    - name: Run test suite
-      run: composer test
+    - uses: actions/checkout@v7
+    - run: composer update --with=typo3/cms-core:^${{ matrix.typo3 }}
+    - run: vendor/bin/grumphp run
+    - run: composer test
