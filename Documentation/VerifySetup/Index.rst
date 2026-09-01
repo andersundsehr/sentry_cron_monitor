@@ -50,6 +50,22 @@ Replace ``<task-uid>`` with that UID:
 The command must run with the same ``Production`` context and environment
 variables as the regular Scheduler cron job.
 
+For a local Docker installation whose regular context is ``Development/docker``,
+enable monitoring for this single command while retaining the Docker database
+configuration:
+
+..  code-block:: shell
+
+    TYPO3_CONTEXT=Production/docker vendor/bin/typo3 scheduler:execute --task=<task-uid>
+
+The context must start with ``Production``. Keep the ``/docker`` suffix locally;
+``Production/Integration`` selects integration infrastructure such as its
+database host and usually cannot run in a local Docker network.
+
+Run the configured task through ``scheduler:execute``. Starting its Symfony
+command directly bypasses the Scheduler integration and does not create a
+Sentry monitor.
+
 3. Check Sentry
 ===============
 
@@ -61,12 +77,12 @@ Open the Sentry project and verify these results:
     *   - Location
         - Expected result
     *   - Crons
-        - A monitor named ``<task title> (uid: <task UID>)`` exists.
+        - A monitor named ``<normalized task title>-uid-<task UID>`` exists.
     *   - Monitor details
         - The latest check-in has the ``ok`` status for a successful task.
     *   - Alerts
-        - An issue alert named ``Monitor Alert for <task title> (uid: <task
-          UID>)`` exists.
+        - An issue alert named ``Monitor Alert for <normalized task
+          title>-uid-<task UID>`` exists.
 
 ..  admonition:: SCREENSHOT TODO: Sentry cron monitor overview
 

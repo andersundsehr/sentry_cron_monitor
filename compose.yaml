@@ -1,0 +1,9 @@
+services:
+  documentation:
+    image: ghcr.io/typo3-documentation/render-guides:latest
+    ports:
+      - "${DOCS_BIND_ADDRESS:-0.0.0.0}:${DOCS_PORT:-1337}:1337"
+    volumes:
+      - ./Documentation:/project/Documentation
+      - ./Documentation-GENERATED-temp:/project/Documentation-GENERATED-temp
+    command: ["--config=Documentation", "--watch", "--host=0.0.0.0"]

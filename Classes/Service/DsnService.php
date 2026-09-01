@@ -32,7 +32,7 @@ class DsnService
 
         return $this->provideSentry()
             . '/api/0/organizations/' . rawurlencode($orgName)
-            . '/monitors/?project=' . rawurlencode((string) $dsn->getProjectId());
+            . '/monitors/?project=' . rawurlencode($dsn->getProjectId());
     }
 
     public function provideMonitorUrl(string $orgName, string $monitorId): string

@@ -2,6 +2,7 @@
 
 namespace AUS\SentryCronMonitor\Service;
 
+use RuntimeException;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 use TYPO3\CMS\Scheduler\Task\ExecuteSchedulableCommandTask;
 
@@ -13,15 +14,30 @@ final readonly class MonitorTitleService
             ? $this->getCommandIdentifier($task)
             : $task->getTaskTitle();
 
-        return $taskTitle . ' (uid: ' . $task->getTaskUid() . ')';
+        return rtrim(
+            strtolower((string) preg_replace(
+                '/[^A-Za-z0-9]+/',
+                '-',
+                trim($taskTitle . ' (uid: ' . $task->getTaskUid() . ')'),
+            )),
+            '-',
+        );
     }
 
-    private function getCommandIdentifier(ExecuteSchedulableCommandTask $task): string
+    private function getCommandIdentifier(object $task): string
     {
         if (method_exists($task, 'getCommandIdentifier')) {
-            return $task->getCommandIdentifier();
+            $commandIdentifier = $task->getCommandIdentifier();
+        } elseif (method_exists($task, 'getTaskType')) {
+            $commandIdentifier = $task->getTaskType();
+        } else {
+            throw new RuntimeException('Could not determine the Scheduler command identifier.', 1756806956);
         }
 
-        return $task->getTaskType();
+        if (!is_string($commandIdentifier)) {
+            throw new RuntimeException('The Scheduler command identifier is not a string.', 1756806957);
+        }
+
+        return $commandIdentifier;
     }
 }

@@ -13,20 +13,15 @@ tasks require no task-specific Sentry code.
 Monitor identity
 ================
 
-For Scheduler tasks that execute console commands, the extension combines the
-command identifier and task UID before sending a check-in to Sentry:
+For Scheduler tasks that execute console commands, the extension combines and
+normalizes the command identifier and task UID before sending a check-in to
+Sentry:
 
 ..  code-block:: text
 
-    <command identifier> (uid: <task UID>)
+    <normalized-command-identifier>-uid-<task UID>
 
 For example:
-
-..  code-block:: text
-
-    aus-projectcenter:sync:absences-to-outlook (uid: 26)
-
-Sentry normalizes this value into the monitor slug:
 
 ..  code-block:: text
 
@@ -38,9 +33,9 @@ Failures for this monitor appear in Sentry as:
 
     Cron failure: aus-projectcenter-sync-absences-to-outlook-uid-26
 
-Other Scheduler task types use their task title instead of a command identifier.
-The UID distinguishes otherwise identical tasks. Renaming a task or command
-changes the slug and can leave the previous monitor in Sentry.
+Other Scheduler task types use their normalized task title instead of a command
+identifier. The UID distinguishes otherwise identical tasks. Renaming a task or
+command changes the slug and can leave the previous monitor in Sentry.
 
 Schedule mapping
 ================

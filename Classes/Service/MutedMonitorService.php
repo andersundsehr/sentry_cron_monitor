@@ -34,6 +34,7 @@ final readonly class MutedMonitorService
             if (isset($visitedUrls[$nextPageUrl])) {
                 throw new RuntimeException('Sentry returned a circular monitor pagination link.', 1754574518);
             }
+
             $visitedUrls[$nextPageUrl] = true;
 
             $response = $this->requestFactory->request($nextPageUrl, 'GET', [

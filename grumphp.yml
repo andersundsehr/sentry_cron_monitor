@@ -18,3 +18,7 @@ parameters:
   convention.fractor_enable: true
   convention.fractor_config: fractor.php
   convention.fractor_clear-cache: false
+grumphp:
+  tasks:
+    securitychecker_composeraudit:
+      abandoned: null

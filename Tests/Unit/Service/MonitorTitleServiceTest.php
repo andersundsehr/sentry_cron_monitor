@@ -22,7 +22,7 @@ final class MonitorTitleServiceTest extends TestCase
         $task->setTaskUid(26);
 
         self::assertSame(
-            'aus-projectcenter:sync:absences-to-outlook (uid: 26)',
+            'aus-projectcenter-sync-absences-to-outlook-uid-26',
             (new MonitorTitleService())->getTitle($task),
         );
     }
@@ -47,6 +47,6 @@ final class MonitorTitleServiceTest extends TestCase
         };
         $task->setTaskUid(12);
 
-        self::assertSame('Custom task (uid: 12)', (new MonitorTitleService())->getTitle($task));
+        self::assertSame('custom-task-uid-12', (new MonitorTitleService())->getTitle($task));
     }
 }
