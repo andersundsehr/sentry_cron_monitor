@@ -35,12 +35,6 @@ Run the command without options first:
 The command lists the ID, slug, and name of every matching monitor but deletes
 nothing.
 
-..  admonition:: SCREENSHOT TODO: Muted monitor cleanup preview
-
-    Add :file:`Documentation/Images/DeleteMutedMonitorsPreview.png`. Show the
-    command table with example monitors. Use artificial names and redact IDs
-    from a real Sentry organization.
-
 Delete the listed monitors
 --------------------------
 
@@ -70,9 +64,3 @@ To run cleanup on a schedule:
     Automatic cleanup permanently deletes every muted monitor in the configured
     project. Use the preview command after configuration changes and before
     enabling the scheduled task.
-
-..  admonition:: SCREENSHOT TODO: Automatic muted monitor cleanup
-
-    Add :file:`Documentation/Images/Typo3DeleteMutedMonitorsTask.png`. Show the
-    TYPO3 Scheduler task with the selected command, ``--force`` option, and
-    schedule. Do not include customer-specific task data.

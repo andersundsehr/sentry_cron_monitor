@@ -32,12 +32,6 @@ List the configured Scheduler tasks:
 
 Record the UID of a harmless task.
 
-..  admonition:: SCREENSHOT TODO: TYPO3 Scheduler task list
-
-    Add :file:`Documentation/Images/Typo3SchedulerTaskList.png`. Show the TYPO3
-    Scheduler backend module with one harmless task, its UID, schedule, and
-    manual execution action visible. Do not include customer data.
-
 2. Run the task
 ===============
 
@@ -83,24 +77,6 @@ Open the Sentry project and verify these results:
     *   - Alerts
         - An issue alert named ``Monitor Alert for <normalized task
           title>-uid-<task UID>`` exists.
-
-..  admonition:: SCREENSHOT TODO: Sentry cron monitor overview
-
-    Add :file:`Documentation/Images/SentryCronMonitorOverview.png`. Show the
-    Sentry :guilabel:`Crons` overview with the newly created TYPO3 task monitor
-    and a healthy status.
-
-..  admonition:: SCREENSHOT TODO: Successful Sentry check-in
-
-    Add :file:`Documentation/Images/SentryCronMonitorDetails.png`. Show the
-    monitor detail page with the expected schedule and the latest ``ok``
-    check-in. Redact project and organization details where necessary.
-
-..  admonition:: SCREENSHOT TODO: Generated Sentry alert rule
-
-    Add :file:`Documentation/Images/SentryIssueAlertRule.png`. Show the generated
-    issue alert rule, its ``monitor.slug`` filter, ``Production`` environment,
-    and Microsoft Teams action.
 
 The first execution creates the monitor and issue alert. Later executions reuse
 the matching alert rule.

@@ -66,12 +66,6 @@ Configuration reference
     Numeric integration ID from the target URL of the
     :guilabel:`Configure` link in the Sentry Microsoft Teams integration.
 
-    ..  admonition:: SCREENSHOT TODO: Microsoft Teams integration ID
-
-        Add :file:`Documentation/Images/SentryTeamsIntegrationId.png`. Show the
-        Sentry integration overview and the :guilabel:`Configure` link used to
-        find the numeric integration ID. Redact organization-specific values.
-
 ``orgName``
     Environment variable: ``SENTRY_ORGANIZATION``
 
@@ -90,12 +84,6 @@ Configuration reference
     Sentry user authentication token with ``alerts:read`` and ``alerts:write``
     permissions. The extension uses it to manage issue alert rules and to list
     and delete cron monitors.
-
-    ..  admonition:: SCREENSHOT TODO: Sentry authentication token permissions
-
-        Add :file:`Documentation/Images/SentryAuthTokenPermissions.png`. Show
-        the required alert-rule permissions without displaying the token value,
-        user email address, or organization details.
 
 ..  _configuration-timezone:
 
