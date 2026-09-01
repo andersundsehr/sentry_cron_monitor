@@ -5,10 +5,7 @@ Sentry monitors
 ===============
 
 The extension creates a Sentry cron monitor for each TYPO3 Scheduler task.
-Starting a task manually in the TYPO3 Scheduler backend creates an additional
-monitor instead of using the monitor for scheduled executions. Running the task
-with ``scheduler:execute`` uses the scheduled monitor. Existing and newly added
-tasks require no task-specific Sentry code.
+Existing and newly added tasks require no task-specific Sentry code.
 
 Monitor identity
 ================
