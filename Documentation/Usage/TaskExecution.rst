@@ -25,21 +25,6 @@ A developer or operator can run one configured Scheduler task by UID:
 
     vendor/bin/typo3 scheduler:execute --task=<task-uid>
 
-``scheduler:run`` and ``scheduler:execute`` use the same Sentry monitor for the
-same task.
-
-Manual execution in the TYPO3 backend
-=====================================
-
-Starting a task manually in the TYPO3 Scheduler backend creates an additional
-Sentry cron monitor instead of using the monitor for its scheduled executions.
-
-..  important::
-
-    The extension monitors a console command only when it runs as a configured
-    TYPO3 Scheduler task. Running a Symfony command directly does not pass
-    through this extension.
-
 Check-in results
 ================
 
