@@ -9,8 +9,8 @@ Meet every requirement on this page before installing the extension.
 System requirements
 ===================
 
-* TYPO3 12.4 LTS or 13.4 LTS
-* PHP 8.3 or 8.4
+* TYPO3 13.4 LTS or 14.3
+* PHP 8.3, 8.4, or 8.5
 * TYPO3 Scheduler system extension
 * PHP ``allow_url_fopen`` support for the Sentry reachability check
 
