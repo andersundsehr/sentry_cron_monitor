@@ -1,26 +1,13 @@
-# Sentry Cron Monitor and Microsoft Teams Alerts Generator for TYPO3 Scheduler Tasks
+# Sentry Cron Monitor
 
-## What does this extension do?
-When a scheduler task runs:
-- It will create a monitor and an alert in Sentry for the given scheduler task if there is none yet.
-- It will send a check-in status to Sentry to indicate whether the task was successful or not.
-- If the task fails, it will send a status error to Sentry, and the alert (only in Production) from the cron monitor will send a notification to the configured Microsoft Teams channel. Example:
-![img_1.png](img_1.png)
-## Requirements:
-- Microsoft Teams Integration in Sentry + add App to (standard) Channel to get $integrationIdMsTeams in Sentry: [https://develop.sentry.dev/integrations/msteams/](https://develop.sentry.dev/integrations/msteams/)
-- Successful Integration in Channel:
-  <img width="1273" height="1042" alt="image" src="https://github.com/user-attachments/assets/b32d39f9-f266-4911-9add-7c07f53616a8" />
-- ⚠️ The first channel must always be named 'General'; otherwise, it will not work! All other channels created after the first one can be given any name.
-## Extension Configuration:
-1. **Integration ID for Microsoft Teams in Sentry**: `$integrationIdMsTeams`
-   - You can get this from the URL of the Microsoft Teams Integration in Sentry when you hover over "Configure."
-2. **Organization Name in Sentry**: `$orgName`
-3. **Name of the Microsoft Teams channel for notifications**: `$teamsChannelName`
-4. **Authorization token for the Sentry API**: `$authToken`
-   - You can create this token in the User Auth Tokens in Sentry.
-   - Make sure to grant read and write permissions to alerts.
-5. **Timezone** for cron monitors: `$timezone`
-   - Example: `Europe/Berlin`
+TYPO3 extension that creates Sentry cron monitors for Scheduler tasks and sends
+failure notifications to Microsoft Teams.
 
-## Tip: 
-- If a cron monitor is triggering too many false positives, increase the failure tolerance in Sentry.
+## Documentation
+
+The complete documentation is available in the
+[TYPO3 documentation](https://docs.typo3.org/p/andersundsehr/sentry_cron_monitor/main/en-us/).
+
+## License
+
+This extension is licensed under the GPL-2.0-or-later license.

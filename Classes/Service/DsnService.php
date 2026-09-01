@@ -15,13 +15,31 @@ class DsnService
     public function provideUrl(string $orgName): string
     {
         $dsn = $this->getDsn();
+
         return $dsn->getScheme() . '://' . $dsn->getHost() . '/api/0/projects/' . $orgName . '/' . $dsn->getProjectId() . '/rules/';
     }
 
     public function provideSentry(): string
     {
         $dsn = $this->getDsn();
+
         return $dsn->getScheme() . '://' . $dsn->getHost();
+    }
+
+    public function provideMonitorsUrl(string $orgName): string
+    {
+        $dsn = $this->getDsn();
+
+        return $this->provideSentry()
+            . '/api/0/organizations/' . rawurlencode($orgName)
+            . '/monitors/?project=' . rawurlencode((string) $dsn->getProjectId());
+    }
+
+    public function provideMonitorUrl(string $orgName, string $monitorId): string
+    {
+        return $this->provideSentry()
+            . '/api/0/organizations/' . rawurlencode($orgName)
+            . '/monitors/' . rawurlencode($monitorId) . '/';
     }
 
     public function getDsn(): Dsn
