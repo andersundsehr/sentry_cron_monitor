@@ -2,3 +2,4 @@ var/
 vendor/
 public/
 composer.lock
+Documentation-GENERATED-temp/

@@ -2,20 +2,21 @@
 
 namespace AUS\SentryCronMonitor\Xclass;
 
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use AUS\SentryCronMonitor\Service\DsnService;
-use RuntimeException;
 use AUS\SentryCronMonitor\Service\AlertService;
+use AUS\SentryCronMonitor\Service\DsnService;
+use AUS\SentryCronMonitor\Service\MonitorTitleService;
 use Override;
+use RuntimeException;
 use Sentry\CheckInStatus;
 use Sentry\MonitorConfig;
 use Sentry\MonitorSchedule;
 use Sentry\MonitorScheduleUnit;
 use Throwable;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Execution;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
-use TYPO3\CMS\Core\Core\Environment;
 
 use function Sentry\captureCheckIn;
 
@@ -28,8 +29,11 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
     #[Override]
     public function executeTask(AbstractTask $task): bool
     {
-        $isSentryReachable = $this->isSentryReachable();
-        if (!Environment::getContext()->isProduction() || !$isSentryReachable) {
+        if (!Environment::getContext()->isProduction()) {
+            return parent::executeTask($task);
+        }
+
+        if (!$this->isSentryReachable()) {
             return parent::executeTask($task);
         }
 
@@ -46,7 +50,7 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
         $timezone = $extensionConfiguration->get('sentry_cron_monitor', 'timezone');
         $monitorConfig = new MonitorConfig($monitorSchedule, timezone: $timezone);
 
-        $title = $task->getTaskTitle() . ' (uid: ' . $task->getTaskUid() . ')';
+        $title = GeneralUtility::makeInstance(MonitorTitleService::class)->getTitle($task);
         $checkInId = captureCheckIn(
             slug: $title,
             status: CheckInStatus::inProgress(),
@@ -75,6 +79,14 @@ class Scheduler extends \TYPO3\CMS\Scheduler\Scheduler
     {
         $dsnService = GeneralUtility::makeInstance(DsnService::class);
         $url = $dsnService->provideSentry();
-        return (bool) @fopen($url, "r");
+
+        $handle = @fopen($url, 'r');
+        if ($handle === false) {
+            return false;
+        }
+
+        fclose($handle);
+
+        return true;
     }
 }
