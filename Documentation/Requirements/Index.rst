@@ -24,12 +24,6 @@ Sentry requirements
   permissions to manage issue alert rules and cron monitors
 * Outbound HTTPS access from TYPO3 to the Sentry host
 
-..  admonition:: SCREENSHOT TODO: Sentry project and DSN
-
-    Add :file:`Documentation/Images/SentryProjectDsn.png`. Show where an
-    integrator finds the project DSN in Sentry. Redact the public key, secret
-    values, organization details, and project identifiers.
-
 ..  important::
 
     This extension depends on an initialized Sentry SDK but does not initialize
