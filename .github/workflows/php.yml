@@ -21,6 +21,9 @@ jobs:
         php-version: ${{ matrix.php }}
 
     - uses: actions/checkout@v7
+    # CI-only alias until TYPO3 accepts the security-fixed svg-sanitize ^1.0.
+    - run: composer require "enshrined/svg-sanitize:1.0.0 as 0.22.99" --dev --no-update --sort-packages --no-interaction
     - run: composer update --with=typo3/cms-core:^${{ matrix.typo3 }}
+    - run: bash tests/typo3-svg-sanitizer.sh
     - run: vendor/bin/grumphp run
     - run: composer test
