@@ -21,6 +21,7 @@ jobs:
         php-version: ${{ matrix.php }}
 
     - uses: actions/checkout@v7
+    - run: composer require "enshrined/svg-sanitize:~1.0.0" --dev --no-update --sort-packages --no-interaction
     - run: composer update --with=typo3/cms-core:^${{ matrix.typo3 }}
     - run: vendor/bin/grumphp run
     - run: composer test
