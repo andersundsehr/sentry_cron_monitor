@@ -34,6 +34,9 @@ The monitor exists but the alert does not
 * Verify ``SENTRY_AUTH_TOKEN`` can list and create issue alert rules.
 * Inspect the TYPO3 and Sentry logs for HTTP authentication or permission
   errors.
+* A failing Sentry alert API never prevents the Scheduler task from running.
+  The failure is logged as the warning ``Could not ensure the Sentry alert for
+  the cron monitor`` in the TYPO3 log.
 
 The alert exists but Teams receives nothing
 ===========================================

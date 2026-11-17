@@ -3,9 +3,11 @@
 namespace AUS\SentryCronMonitor\Service;
 
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use Throwable;
 
 #[Autoconfigure(public: true)]
 final readonly class AlertService
@@ -14,6 +16,7 @@ final readonly class AlertService
         private ExtensionConfiguration $extensionConfiguration,
         private RequestFactory $requestFactory,
         private DsnService $dsnService,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -26,13 +29,24 @@ final readonly class AlertService
 
         $slug = rtrim(strtolower((string)preg_replace('/[^A-Za-z0-9]+/', '-', trim($title))), '-');
 
-        if ($this->alertExits($orgName, $authToken, $slug)) {
-            return;
-        }
+        try {
+            if ($this->alertExits($orgName, $authToken, $slug)) {
+                return;
+            }
 
-        $this->alertSentry($orgName, $authToken, $slug, $title, $integrationIdMsTeams, $teamsChannelName);
+            $this->alertSentry($orgName, $authToken, $slug, $title, $integrationIdMsTeams, $teamsChannelName);
+        } catch (Throwable $throwable) {
+            // monitoring must never prevent a task from running
+            $this->logger->warning(
+                'Could not ensure the Sentry alert for the cron monitor',
+                ['title' => $title, 'slug' => $slug, 'exception' => $throwable->getMessage()],
+            );
+        }
     }
 
+    /**
+     * @throws Exception
+     */
     private function alertExits(string $orgName, string $authToken, string $slug): bool
     {
         $url = $this->dsnService->provideUrl($orgName);
@@ -47,7 +61,7 @@ final readonly class AlertService
         $data = json_decode($jsonString, true);
 
         if (!is_array($data)) {
-            return false;
+            throw new Exception('Sentry returned no valid JSON', 3744386450);
         }
 
         foreach ($data as $rule) {

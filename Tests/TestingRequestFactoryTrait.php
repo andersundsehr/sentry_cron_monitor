@@ -7,6 +7,7 @@ namespace AUS\SentryCronMonitor\Tests;
 use Exception;
 use Override;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 use function array_shift;
 
@@ -17,7 +18,7 @@ trait TestingRequestFactoryTrait
     private readonly ResponseStore $responseStore;
 
     /**
-     * @param array<ResponseInterface> $responses
+     * @param array<ResponseInterface|Throwable> $responses
      */
     public function __construct(array $responses)
     {
@@ -36,6 +37,11 @@ trait TestingRequestFactoryTrait
             'options' => $options,
             'context' => $context,
         ];
-        return array_shift($this->responseStore->responses) ?? throw new Exception('to many requests made for this test.', 3414962574);
+        $response = array_shift($this->responseStore->responses) ?? throw new Exception('to many requests made for this test.', 3414962574);
+        if ($response instanceof Throwable) {
+            throw $response;
+        }
+
+        return $response;
     }
 }
